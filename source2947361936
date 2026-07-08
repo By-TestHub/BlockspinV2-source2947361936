@@ -1329,7 +1329,7 @@ minBtn.Activated:Connect(function()
         main:TweenSize(UDim2.new(0, 240, 0, 130), "Out", "Quad", 0.1, true)
         task.wait(0.1)
         container.Visible = true
-        minBtn.Text = "—"
+        minBtn.Text = "–"
     end
 end)
 
@@ -1391,7 +1391,7 @@ local droneActive = false
 local droneCamPart = nil
 local droneSpeed = 8
 
-createSwitch("กันตาย ไม่กัน100% (หากตายของจะตกใต้ดิน)", 5, function(state)
+createSwitch("กันตาย ไม่กัน100% (เปิดไว้อุ่นใจกว่า)", 5, function(state)
     burrowActive = state
 end)
 
