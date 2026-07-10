@@ -1459,9 +1459,9 @@ _G.BurrowConnection = RunService.Heartbeat:Connect(function()
             
             local targetY = originalY - 45
             local loopTime = os.clock() * 12
-            local shiftX = math.sin(loopTime) * 1.5
-            local shiftZ = math.cos(loopTime * 1.2) * 1.5
-            local shiftY = math.sin(loopTime * 2) * 0.3
+			local shiftX = math.sin(loopTime) * 0.2
+			local shiftZ = math.cos(loopTime * 1.2) * 0.2
+			local shiftY = math.sin(loopTime * 2) * 0.05
             
             root.Velocity = Vector3.zero
             root.RotVelocity = Vector3.zero
