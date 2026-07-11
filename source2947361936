@@ -1391,7 +1391,7 @@ local droneActive = false
 local droneCamPart = nil
 local droneSpeed = 8
 
-createSwitch("กันตาย ไม่กัน100% (เปิดไว้อุ่นใจกว่า)", 5, function(state)
+createSwitch("กันตุย ไม่กัน100% (เปิดไว้อุ่นใจกว่า)", 5, function(state)
     burrowActive = state
 end)
 
