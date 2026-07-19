@@ -1439,11 +1439,16 @@ createSwitch("ถอดจิต (ตัวไม่ขยับ)", 45, function
     end
 end)
 
-_G.BurrowConnection = RunService.Heartbeat:Connect(function()
+_G.BurrowConnection = game:GetService("RunService").Heartbeat:Connect(function()
     local char = player.Character
     local root = char and char:FindFirstChild("HumanoidRootPart")
     local hum = char and char:FindFirstChildOfClass("Humanoid")
     if not root or not hum then return end
+
+    if hum.Health <= 0 then
+        isBurrowed = false
+        return
+    end
 
     if burrowActive and hum.Health <= 15 and not isBurrowed then
         isBurrowed = true
@@ -1455,11 +1460,27 @@ _G.BurrowConnection = RunService.Heartbeat:Connect(function()
     if isBurrowed then
         if hum.Health >= 30 then
             isBurrowed = false
+            
             for _, part in pairs(char:GetDescendants()) do
-                if part:IsA("BasePart") then part.CanCollide = true end
+                if part:IsA("BasePart") then
+                    if part.Name == "HumanoidRootPart" or part.Name:find("Torso") or part.Name == "Head" then
+                        part.CanCollide = true
+                    else
+                        part.CanCollide = false
+                    end
+                end
             end
+            
+            local rayParams = RaycastParams.new()
+            rayParams.FilterDescendantsInstances = {char}
+            rayParams.FilterType = Enum.RaycastFilterType.Exclude
+            local rayResult = workspace:Raycast(Vector3.new(root.Position.X, originalY + 20, root.Position.Z), Vector3.new(0, -150, 0), rayParams)
+            
+            local groundY = rayResult and (rayResult.Position.Y + 3) or originalY
+            
             root.Velocity = Vector3.zero
-            root.CFrame = CFrame.new(root.Position.X, originalY, root.Position.Z)
+            root.CFrame = CFrame.new(root.Position.X, groundY, root.Position.Z) * root.CFrame.Rotation
+            hum:ChangeState(Enum.HumanoidStateType.Running)
         else
             for _, part in pairs(char:GetDescendants()) do
                 if part:IsA("BasePart") then part.CanCollide = false end
@@ -1467,13 +1488,13 @@ _G.BurrowConnection = RunService.Heartbeat:Connect(function()
             
             local targetY = originalY - 45
             local loopTime = os.clock() * 12
-			local shiftX = math.sin(loopTime) * 0.2
-			local shiftZ = math.cos(loopTime * 1.2) * 0.2
-			local shiftY = math.sin(loopTime * 2) * 0.05
+            local shiftX = math.sin(loopTime) * 0.2
+            local shiftZ = math.cos(loopTime * 1.2) * 0.2
+            local shiftY = math.sin(loopTime * 2) * 0.05
             
             root.Velocity = Vector3.zero
             root.RotVelocity = Vector3.zero
-            root.CFrame = CFrame.new(root.Position.X + shiftX, targetY + shiftY, root.Position.Z + shiftZ)
+            root.CFrame = CFrame.new(root.Position.X + shiftX, targetY + shiftY, root.Position.Z + shiftZ) * root.CFrame.Rotation
         end
     end
 end)
